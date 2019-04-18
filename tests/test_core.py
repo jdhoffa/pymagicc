@@ -151,10 +151,14 @@ def test_run_failure_confusing_emissions_scenarios(package, invalid_config):
         "dataframe with Pymagicc and pandas, then feed this single Dataframe into "
         "Pymagicc's run API."
     )
-    with pytest.raises(ValueError, match=error_msg):
-        package.run()
 
-    assert package.config is None
+    if package.version == 6:
+        with pytest.raises(ValueError, match=error_msg):
+            package.run()
+        assert package.config is None
+    else:
+        with pytest.warns(DeprecationWarning, match=error_msg):
+            package.run()
 
 
 def test_run_success(package):

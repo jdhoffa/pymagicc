@@ -5,7 +5,7 @@ from os.path import basename, dirname, exists, join, isfile, abspath
 from tempfile import mkdtemp
 from dateutil.relativedelta import relativedelta
 from copy import deepcopy
-
+import warnings
 
 import numpy as np
 import f90nml
@@ -327,7 +327,10 @@ class MAGICCBase(object):
 
             elif k.startswith("file_emisscen_"):
                 if usr_cfg[nml_to_check][k] not in ["NONE", ""]:
-                    raise ValueError(emisscen_error_msg)
+                    if self.version == 6:
+                        raise ValueError(emisscen_error_msg)
+                    else:
+                        warnings.warn(emisscen_error_msg, DeprecationWarning)
 
     def write(self, mdata, name):
         """Write an input file to disk
