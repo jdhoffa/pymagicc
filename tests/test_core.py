@@ -154,11 +154,10 @@ def test_run_failure_confusing_emissions_scenarios(package, invalid_config):
 
     if package.version == 6:
         with pytest.raises(ValueError, match=error_msg):
-            package.run()
-        assert package.config is None
+            package.check_config()
     else:
         with pytest.warns(DeprecationWarning, match=error_msg):
-            package.run()
+            package.check_config()
 
 
 def test_run_success(package):
